@@ -72,7 +72,7 @@ function OtpInput({ value, onChange, error }: { value: string; onChange: (value:
 
 export default function Home() {
   const [step, setStep] = useState<Step>(1);
-  const [form, setForm] = useState<FormData>({ fullName: "", email: "", country: "+34", phone: "", password: "", confirmPassword: "" });
+  const [form, setForm] = useState<FormData>({ fullName: "", email: "", country: "+52", phone: "", password: "", confirmPassword: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [code, setCode] = useState("");
@@ -165,7 +165,7 @@ export default function Home() {
                 <div className="form-grid">
                   <div className="field full"><FieldLabel htmlFor="fullName">Full name</FieldLabel><input id="fullName" value={form.fullName} onChange={(e) => update("fullName", e.target.value)} placeholder="Alex Morgan" autoComplete="name" required /></div>
                   <div className="field full"><FieldLabel htmlFor="email">Email address</FieldLabel><div className="input-with-icon"><Mail size={17} /><input id="email" type="email" value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="alex@company.com" autoComplete="email" required /></div></div>
-                  <div className="field full"><FieldLabel htmlFor="phone" optional>Phone number</FieldLabel><div className="phone-input"><div className="country-select"><span>{form.country}</span><ChevronDown size={14} /></div><input id="phone" type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} placeholder="612 345 678" autoComplete="tel" required /></div><p className="field-hint">We’ll use this for future WhatsApp notifications.</p></div>
+                  <div className="field full"><FieldLabel htmlFor="phone" optional>Phone number</FieldLabel><div className="phone-input"><div className="country-select"><span>{form.country}</span><ChevronDown size={14} /></div><input id="phone" type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} placeholder="55 123 45 67" autoComplete="tel" required /></div><p className="field-hint">We’ll use this for future WhatsApp notifications.</p></div>
                   <div className="field"><FieldLabel htmlFor="password">Password</FieldLabel><div className="input-with-icon trailing"><LockKeyhole size={17} /><input id="password" type={showPassword ? "text" : "password"} value={form.password} onChange={(e) => update("password", e.target.value)} placeholder="Create a password" autoComplete="new-password" required /><button type="button" className="icon-button" aria-label="Toggle password visibility" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></div></div>
                   <div className="field"><FieldLabel htmlFor="confirmPassword">Confirm password</FieldLabel><div className="input-with-icon trailing"><LockKeyhole size={17} /><input id="confirmPassword" type={showConfirm ? "text" : "password"} value={form.confirmPassword} onChange={(e) => update("confirmPassword", e.target.value)} placeholder="Repeat password" autoComplete="new-password" required /><button type="button" className="icon-button" aria-label="Toggle confirmation visibility" onClick={() => setShowConfirm(!showConfirm)}>{showConfirm ? <EyeOff size={17} /> : <Eye size={17} />}</button></div></div>
                 </div>
