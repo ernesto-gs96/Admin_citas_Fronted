@@ -1,9 +1,10 @@
-import { headers } from 'next/headers'
-import { auth } from '@/lib/auth'
+'use client'
+
+import { authClient } from "@/lib/auth-client";
 import { AuthScreen } from '@/components/auth-screen'
 
-export default async function Page() {
-  const session = await auth.api.getSession({ headers: await headers() })
+export default function Page() {
+  const { data: session } = authClient.useSession();
 
   if (session?.user) {
     return (

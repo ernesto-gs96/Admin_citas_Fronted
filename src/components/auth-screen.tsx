@@ -32,8 +32,9 @@ export function AuthScreen() {
       : await authClient.signIn.email({ email, password })
 
     setLoading(false)
-    if (result.error) {
-      setError('No pudimos completar la solicitud. Revisa tus datos e inténtalo de nuevo.')
+    if (result.error?.message) {
+      setError(result.error.message)
+      // setError('No pudimos completar la solicitud. Revisa tus datos e inténtalo de nuevo.')
       return
     }
 
