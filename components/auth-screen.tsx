@@ -47,9 +47,9 @@ export function AuthScreen() {
       <div className="auth-layout">
         <aside className="auth-aside" aria-label="Información de Agenda Clara">
           <div className="auth-brand"><BrandMark /><span>Agenda Clara</span></div>
-          <div className="auth-aside-copy"><p className="section-label">TU AGENDA, EN CALMA</p><h1>Más tiempo para atender. Menos tiempo para coordinar.</h1><p>Organiza tu práctica en un solo lugar y ofrece una experiencia clara desde la primera cita.</p></div>
+          <div className="auth-aside-copy"><p className="section-label">PANEL DE CITAS</p><h1>Toda tu agenda, en un solo lugar.</h1><p>Confirma, reprograma y da seguimiento a tus citas sin hojas sueltas ni mensajes cruzados.</p></div>
           <div className="schedule-preview" aria-hidden="true"><div className="preview-header"><span>Hoy</span><span>Martes, 16</span></div><div className="preview-row"><time>09:00</time><span className="preview-event"><i />Consulta inicial</span></div><div className="preview-row"><time>11:00</time><span className="preview-event muted"><i />Seguimiento</span></div><div className="preview-row"><time>16:00</time><span className="preview-event"><i />Consulta general</span></div></div>
-          <p className="auth-aside-footer">Una agenda diseñada para profesionales independientes.</p>
+          <p className="auth-aside-footer">Usado por médicos y profesionales independientes.</p>
         </aside>
         <section className="auth-panel" aria-labelledby="auth-title">
           <div className="mobile-brand"><BrandMark /><span>Agenda Clara</span></div>
