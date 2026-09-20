@@ -1,13 +1,13 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { BrandMark } from '@/components/auth/auth-icons'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { BrandMark } from "@/components/auth/auth-icons";
 
 export function SiteNavbar() {
-  const pathname = usePathname()
-  const isLogin = pathname === '/login'
-  const isRegister = pathname === '/register'
+  const pathname = usePathname();
+  const isLogin = pathname === "/login";
+  const isRegister = pathname === "/register";
 
   return (
     <header className="landing-header">
@@ -18,11 +18,18 @@ export function SiteNavbar() {
       <nav className="landing-nav" aria-label="Navegación principal">
         <Link href="/#funcionalidades">Funcionalidades</Link>
         <Link href="/#como-funciona">Cómo funciona</Link>
-        <Link href="/#especialidades">Especialidades</Link>
-        <Link href="/#precios">Para tu práctica</Link>
-        {!isLogin && <Link href="/login" className="text-link">Iniciar sesión</Link>}
-        {!isRegister && <Link href="/register" className="landing-cta-small">Crear cuenta</Link>}
+        <Link href="/#para-quien">Para quién</Link>
+        {!isLogin && (
+          <Link href="/login" className="text-link">
+            Iniciar sesión
+          </Link>
+        )}
+        {!isRegister && (
+          <Link href="/register" className="landing-cta-small">
+            Crear cuenta
+          </Link>
+        )}
       </nav>
     </header>
-  )
+  );
 }
