@@ -1,72 +1,20 @@
 'use client'
-
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { authClient } from '@/lib/auth-client'
 import { CalendarIcon, SettingsIcon, UsersIcon } from '@/components/dashboard/dashboard-icons'
-
-const FEATURES = [
-  {
-    icon: CalendarIcon,
-    title: 'Agenda clara',
-    description: 'Visualiza tu día completo y evita encimar citas sin darte cuenta.',
-  },
-  {
-    icon: UsersIcon,
-    title: 'Pacientes al día',
-    description: 'Guarda el historial de contacto de cada paciente en un solo lugar.',
-  },
-  {
-    icon: SettingsIcon,
-    title: 'A tu manera',
-    description: 'Configura horarios, duración de consultas y recordatorios como trabajas tú.',
-  },
-]
-
+const PILLARS = [['Agenda inteligente', 'Visualiza tu jornada y mantén cada consulta en su lugar.', CalendarIcon], ['Enlace para reservar', 'Comparte una forma clara de recibir nuevas solicitudes.', UsersIcon], ['Confirmaciones simples', 'Centraliza la información necesaria antes de cada cita.', SettingsIcon]] as const
+function Arrow() { return <span aria-hidden="true">→</span> }
 export default function LandingPage() {
-  const router = useRouter()
-  const { data: session, isPending } = authClient.useSession()
-
-  useEffect(() => {
-    if (!isPending && session?.user) {
-      router.replace('/dashboard')
-    }
-  }, [isPending, session, router])
-
-  return (
-    <main className="landing">
-      <section className="landing-hero">
-        <p className="section-label">ADMINISTRACIÓN DE CITAS</p>
-        <h1>Toda tu agenda, en un solo lugar.</h1>
-        <p className="landing-hero-copy">
-          Agenda Clara ayuda a médicos y profesionales independientes a organizar sus citas,
-          dar seguimiento a sus pacientes y llegar a cada consulta con orden, sin hojas
-          sueltas ni mensajes cruzados.
-        </p>
-        <div className="landing-cta-group">
-          <Link href="/register" className="submit-button landing-cta">
-            <span>Crear mi cuenta</span>
-            <span aria-hidden="true">→</span>
-          </Link>
-          <Link href="/login" className="text-link">Ya tengo una cuenta</Link>
-        </div>
-      </section>
-
-      <section className="landing-features" aria-label="Características">
-        {FEATURES.map(({ icon: Icon, title, description }) => (
-          <div className="feature-card" key={title}>
-            <span className="feature-icon"><Icon /></span>
-            <h2>{title}</h2>
-            <p>{description}</p>
-          </div>
-        ))}
-      </section>
-
-      <footer className="landing-footer">
-        <span>© {new Date().getFullYear()} Agenda Clara</span>
-        <span className="security-note"><span aria-hidden="true">⌁</span> Tus datos viajan protegidos y seguros.</span>
-      </footer>
-    </main>
-  )
+  const router = useRouter(); const { data: session, isPending } = authClient.useSession()
+  useEffect(() => { if (!isPending && session?.user) router.replace('/dashboard') }, [isPending, session, router])
+  return <main className="landing">
+    <section className="landing-hero"><p className="landing-kicker"><i /> Agenda para profesionales independientes</p><h1>La tranquilidad de tener tu agenda bajo control.</h1><p className="landing-hero-copy">Organiza tus citas, consulta la disponibilidad y mantén a tus pacientes informados desde un espacio claro y fácil de usar.</p><div className="landing-cta-group"><Link href="/register" className="submit-button landing-cta"><span>Crear mi cuenta</span><Arrow /></Link><Link href="/login" className="landing-secondary-cta">Ya tengo una cuenta</Link></div><p className="landing-helper">Empieza con una cuenta gratuita. Sin tarjeta de crédito.</p></section>
+    <section className="landing-showcase" id="funcionalidades"><div className="section-heading"><p className="section-label">ENTORNO DE TRABAJO</p><h2>Una jornada ordenada, en tiempo real.</h2></div><div className="product-preview"><div className="preview-top"><strong>Tu agenda de hoy</strong><span className="preview-live"><i /> Disponible para reservar</span></div><div className="preview-metrics"><span><small>Próxima cita</small><b>09:30 · Mariana</b></span><span><small>Hoy</small><b>4 citas</b></span><span><small>Por confirmar</small><b>1 pendiente</b></span></div><div className="preview-body"><div className="preview-next"><small>EN CURSO / INMINENTE</small><b>Mariana Ortiz</b><p>Consulta inicial · Presencial</p><span className="preview-detail">Detalle de la cita</span></div><div className="preview-list"><small>CRONOGRAMA DIARIO</small>{['09:30  Mariana Ortiz', '10:30  Espacio disponible', '12:00  Lucía Benítez', '14:30  Roberto Gómez'].map((item, index) => <p className={index === 0 ? 'active' : ''} key={item}>{item}<span>{index === 1 ? 'Reservar' : index === 0 ? 'Confirmada' : 'Programada'}</span></p>)}</div></div></div></section>
+    <section className="landing-section" id="como-funciona"><div className="section-heading"><p className="section-label">DISEÑADA PARA TU PRÁCTICA</p><h2>Menos coordinación manual. Más atención.</h2><p>Una base simple para empezar a digitalizar tu agenda sin complicar tu manera de trabajar.</p></div><div className="pillar-grid">{PILLARS.map(([title, description, Icon]) => <article className="pillar" key={title}><span className="pillar-icon"><Icon /></span><h3>{title}</h3><p>{description}</p><a href="#empezar">Conoce más <Arrow /></a></article>)}</div></section>
+    <section className="landing-section landing-flow" id="especialidades"><div className="section-heading center"><p className="section-label">UN FLUJO CLARO</p><h2>De la cita al seguimiento, sin perder el contexto.</h2></div><div className="flow-grid"><article><span>01</span><h3>El profesional organiza</h3><p>Define cómo y cuándo atiende, con una vista clara de la disponibilidad.</p></article><article><span>02</span><h3>La persona reserva</h3><p>Encuentra un horario disponible y recibe los datos importantes de su cita.</p></article></div></section>
+    <section className="landing-section" id="precios"><div className="section-heading"><p className="section-label">HECHO PARA CRECER CONTIGO</p><h2>Una base flexible para cada tipo de consulta.</h2></div><div className="specialty-grid">{['Medicina general', 'Odontología', 'Psicología', 'Nutrición', 'Servicios profesionales'].map((item) => <article key={item}><CalendarIcon /><h3>{item}</h3><p>Una experiencia de agenda adaptable a tu forma de atender.</p></article>)}</div></section>
+    <section className="landing-final" id="empezar"><h2>Comienza a organizar tu agenda hoy.</h2><p>Da el primer paso hacia una gestión más clara de tus citas.</p><Link href="/register" className="landing-final-cta">Crear mi cuenta <Arrow /></Link></section><footer className="landing-footer"><span>© {new Date().getFullYear()} Agenda Clara</span><span>Una forma más clara de organizar citas.</span></footer>
+  </main>
 }

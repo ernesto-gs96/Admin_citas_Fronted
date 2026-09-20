@@ -12,7 +12,10 @@ export default function DashboardPage() {
 
   return (
     <>
-      <DashboardHeader />
+      <DashboardHeader
+        totalToday={todayAppointments.length}
+        nextTime={nextAppointment?.time}
+      />
 
       <NextAppointmentCard
         next={nextAppointment}

@@ -15,7 +15,11 @@ export function SiteNavbar() {
         <BrandMark />
         <span>Agenda Clara</span>
       </Link>
-      <nav className="landing-nav" aria-label="Acceso">
+      <nav className="landing-nav" aria-label="Navegación principal">
+        <Link href="/#funcionalidades">Funcionalidades</Link>
+        <Link href="/#como-funciona">Cómo funciona</Link>
+        <Link href="/#especialidades">Especialidades</Link>
+        <Link href="/#precios">Para tu práctica</Link>
         {!isLogin && <Link href="/login" className="text-link">Iniciar sesión</Link>}
         {!isRegister && <Link href="/register" className="landing-cta-small">Crear cuenta</Link>}
       </nav>
