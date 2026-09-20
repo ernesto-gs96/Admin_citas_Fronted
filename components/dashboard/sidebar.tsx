@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { authClient } from '@/lib/auth-client'
 import { BrandMark } from '@/components/auth/auth-icons'
-import { CalendarIcon, HomeIcon, LogOutIcon, MenuIcon, SettingsIcon, UsersIcon } from './dashboard-icons'
+import { CalendarIcon, HomeIcon, LogOutIcon, MenuIcon, PlusIcon, SettingsIcon, UsersIcon } from './dashboard-icons'
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Resumen', icon: HomeIcon },
@@ -31,15 +31,20 @@ export function Sidebar({ userName, userEmail }: { userName?: string | null; use
           <BrandMark />
           <span>Agenda Clara</span>
         </div>
-        <button
-          type="button"
-          className="sidebar-menu-toggle"
-          onClick={() => setOpen(true)}
-          aria-label="Abrir menú"
-          aria-expanded={open}
-        >
-          <MenuIcon />
-        </button>
+        <div className="sidebar-topbar-actions">
+          <Link href="/dashboard/citas" className="sidebar-topbar-cta" aria-label="Nueva cita">
+            <PlusIcon />
+          </Link>
+          <button
+            type="button"
+            className="sidebar-menu-toggle"
+            onClick={() => setOpen(true)}
+            aria-label="Abrir menú"
+            aria-expanded={open}
+          >
+            <MenuIcon />
+          </button>
+        </div>
       </div>
 
       {open && <div className="sidebar-overlay" onClick={() => setOpen(false)} aria-hidden="true" />}
@@ -49,6 +54,11 @@ export function Sidebar({ userName, userEmail }: { userName?: string | null; use
           <BrandMark />
           <span>Agenda Clara</span>
         </div>
+
+        <Link href="/dashboard/citas" className="sidebar-cta" onClick={() => setOpen(false)}>
+          <PlusIcon />
+          <span>Nueva cita</span>
+        </Link>
 
         <nav className="sidebar-nav" aria-label="Navegación principal">
           {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
