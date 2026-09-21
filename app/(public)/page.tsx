@@ -283,19 +283,19 @@ export default function LandingPage() {
             encima, no para sumar complejidad.
           </p>
         </div>
-        <div className="feature-grid">
+        <div className="lp-feature-grid">
           {FEATURES.map(([title, Icon, description]) => (
-            <article className="feature-card" key={title}>
-              <span className="feature-icon">
+            <article className="lp-feature-card" key={title}>
+              <span className="lp-feature-icon">
                 <Icon />
               </span>
               <h3>{title}</h3>
               <p>{description}</p>
             </article>
           ))}
-          <article className="feature-card feature-soon">
-            <span className="feature-soon-badge">Próximamente</span>
-            <span className="feature-icon">
+          <article className="lp-feature-card lp-feature-soon">
+            <span className="lp-feature-soon-badge">Próximamente</span>
+            <span className="lp-feature-icon">
               <PhoneIcon />
             </span>
             <h3>Aplicación móvil</h3>

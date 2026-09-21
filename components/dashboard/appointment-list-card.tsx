@@ -1,6 +1,7 @@
 import { UpcomingAppointment } from '@/lib/mock/dashboard'
 import { StatusBadge } from './status-badge'
 import { EmptyState } from './empty-state'
+import { MoreIcon } from './dashboard-icons'
 
 function initials(name: string) {
   return name
@@ -22,17 +23,45 @@ export function AppointmentListCard({ appointments }: { appointments: UpcomingAp
   }
 
   return (
-    <ul className="upcoming-list">
-      {appointments.map((appointment) => (
-        <li key={appointment.id} className="upcoming-row">
-          <div className="upcoming-avatar" aria-hidden="true">{initials(appointment.patientName)}</div>
-          <div className="upcoming-info">
-            <p className="upcoming-name">{appointment.patientName}</p>
-            <p className="upcoming-meta">{appointment.dateLabel} · {appointment.serviceType}</p>
-          </div>
-          <StatusBadge status={appointment.status} />
-        </li>
-      ))}
-    </ul>
+    <div className="upcoming-table-wrap">
+      <table className="upcoming-table">
+        <thead>
+          <tr>
+            <th scope="col">Paciente</th>
+            <th scope="col">Fecha y hora</th>
+            <th scope="col">Servicio</th>
+            <th scope="col">Estado</th>
+            <th scope="col">
+              <span className="sr-only">Acciones</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {appointments.map((appointment) => (
+            <tr key={appointment.id}>
+              <td>
+                <div className="upcoming-table-patient">
+                  <span className="upcoming-avatar" aria-hidden="true">{initials(appointment.patientName)}</span>
+                  <div className="upcoming-info">
+                    <p className="upcoming-name">{appointment.patientName}</p>
+                    <p className="upcoming-meta">{appointment.patientContact}</p>
+                  </div>
+                </div>
+              </td>
+              <td>{appointment.dateLabel}</td>
+              <td>{appointment.serviceType}</td>
+              <td>
+                <StatusBadge status={appointment.status} />
+              </td>
+              <td>
+                <button type="button" className="upcoming-table-more" aria-label={`Más acciones para ${appointment.patientName}`}>
+                  <MoreIcon />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }

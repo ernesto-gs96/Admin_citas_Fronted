@@ -5,16 +5,52 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { authClient } from '@/lib/auth-client'
 import { BrandMark } from '@/components/auth/auth-icons'
-import { CalendarIcon, HomeIcon, LogOutIcon, MenuIcon, PlusIcon, SettingsIcon, UsersIcon } from './dashboard-icons'
+import {
+  CalendarIcon,
+  ClockIcon,
+  HelpIcon,
+  HomeIcon,
+  LogOutIcon,
+  MenuIcon,
+  PlusIcon,
+  SettingsIcon,
+  SlidersIcon,
+  TagIcon,
+  UsersIcon,
+} from './dashboard-icons'
 
-const NAV_ITEMS = [
-  { href: '/dashboard', label: 'Resumen', icon: HomeIcon },
-  { href: '/dashboard/citas', label: 'Citas', icon: CalendarIcon },
+const PRIMARY_NAV = [
+  { href: '/dashboard', label: 'Inicio', icon: HomeIcon },
+  { href: '/dashboard/agenda', label: 'Agenda', icon: CalendarIcon, badgeKey: 'today' as const },
+  { href: '/dashboard/citas', label: 'Citas', icon: TagIcon },
   { href: '/dashboard/pacientes', label: 'Pacientes', icon: UsersIcon },
-  { href: '/dashboard/configuracion', label: 'Configuración', icon: SettingsIcon },
 ]
 
-export function Sidebar({ userName, userEmail }: { userName?: string | null; userEmail: string }) {
+const MANAGEMENT_NAV = [
+  { href: '/dashboard/servicios', label: 'Servicios', icon: SettingsIcon },
+  { href: '/dashboard/disponibilidad', label: 'Disponibilidad', icon: ClockIcon },
+]
+
+function initials(name: string) {
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('')
+}
+
+export function Sidebar({
+  userName,
+  userEmail,
+  specialty,
+  appointmentsToday,
+}: {
+  userName?: string | null
+  userEmail: string
+  specialty: string
+  appointmentsToday: number
+}) {
   const pathname = usePathname()
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -23,6 +59,8 @@ export function Sidebar({ userName, userEmail }: { userName?: string | null; use
     await authClient.signOut()
     router.replace('/login')
   }
+
+  const displayName = userName || 'Tu cuenta'
 
   return (
     <>
@@ -55,13 +93,39 @@ export function Sidebar({ userName, userEmail }: { userName?: string | null; use
           <span>Agenda Clara</span>
         </div>
 
-        <Link href="/dashboard/citas" className="sidebar-cta" onClick={() => setOpen(false)}>
-          <PlusIcon />
-          <span>Nueva cita</span>
-        </Link>
+        <div className="sidebar-profile">
+          <span className="sidebar-profile-avatar" aria-hidden="true">{initials(displayName)}</span>
+          <div className="sidebar-profile-info">
+            <span className="sidebar-profile-name">{displayName}</span>
+            <span className="sidebar-profile-specialty">{specialty}</span>
+          </div>
+        </div>
 
+        <p className="sidebar-nav-label">Principal</p>
         <nav className="sidebar-nav" aria-label="Navegación principal">
-          {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+          {PRIMARY_NAV.map(({ href, label, icon: Icon, badgeKey }) => {
+            const active = pathname === href
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`sidebar-link ${active ? 'active' : ''}`}
+                aria-current={active ? 'page' : undefined}
+                onClick={() => setOpen(false)}
+              >
+                <Icon />
+                <span>{label}</span>
+                {badgeKey === 'today' && appointmentsToday > 0 && (
+                  <span className="sidebar-link-badge">{appointmentsToday} hoy</span>
+                )}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <p className="sidebar-nav-label">Gestión</p>
+        <nav className="sidebar-nav" aria-label="Navegación de gestión">
+          {MANAGEMENT_NAV.map(({ href, label, icon: Icon }) => {
             const active = pathname === href
             return (
               <Link
@@ -78,15 +142,28 @@ export function Sidebar({ userName, userEmail }: { userName?: string | null; use
           })}
         </nav>
 
-        <div className="sidebar-user">
-          <div className="sidebar-user-info">
-            <span className="sidebar-user-name">{userName || 'Tu cuenta'}</span>
-            <span className="sidebar-user-email">{userEmail}</span>
+        <div className="sidebar-footer">
+          <nav className="sidebar-nav" aria-label="Configuración y soporte">
+            <Link
+              href="/dashboard/configuracion"
+              className={`sidebar-link ${pathname === '/dashboard/configuracion' ? 'active' : ''}`}
+              onClick={() => setOpen(false)}
+            >
+              <SettingsIcon />
+              <span>Configuración</span>
+            </Link>
+            <span className="sidebar-link sidebar-link-static">
+              <HelpIcon />
+              <span>Ayuda y soporte</span>
+            </span>
+          </nav>
+
+          <div className="sidebar-user">
+            <button type="button" className="sidebar-signout" onClick={handleSignOut}>
+              <LogOutIcon />
+              <span>Cerrar sesión</span>
+            </button>
           </div>
-          <button type="button" className="sidebar-signout" onClick={handleSignOut}>
-            <LogOutIcon />
-            <span>Cerrar sesión</span>
-          </button>
         </div>
       </aside>
     </>

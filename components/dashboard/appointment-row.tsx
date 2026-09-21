@@ -1,5 +1,6 @@
 import { Appointment } from '@/lib/mock/dashboard'
 import { StatusBadge } from './status-badge'
+import { ChatIcon, VideoIcon } from './dashboard-icons'
 
 export function AppointmentRow({ appointment, highlight = false }: { appointment: Appointment; highlight?: boolean }) {
   const { time, endTime, patientName, serviceType, modality, location, status } = appointment
@@ -17,7 +18,25 @@ export function AppointmentRow({ appointment, highlight = false }: { appointment
           {location ? ` (${location})` : ''}
         </p>
       </div>
-      <StatusBadge status={status} />
+
+      <div className="agenda-row-actions">
+        <StatusBadge status={status} />
+        {highlight ? (
+          <button type="button" className="agenda-action-primary">
+            Iniciar consulta
+          </button>
+        ) : modality === 'Video' ? (
+          <button type="button" className="agenda-action-secondary">
+            <VideoIcon />
+            Abrir sala
+          </button>
+        ) : status === 'pending' ? (
+          <button type="button" className="agenda-action-secondary">
+            <ChatIcon />
+            Avisar por WhatsApp
+          </button>
+        ) : null}
+      </div>
     </li>
   )
 }

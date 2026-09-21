@@ -4,6 +4,8 @@ import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { authClient } from '@/lib/auth-client'
 import { Sidebar } from '@/components/dashboard/sidebar'
+import { TopBar } from '@/components/dashboard/topbar'
+import { professionalSpecialty, todayAppointments } from '@/lib/mock/dashboard'
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const router = useRouter()
@@ -25,8 +27,16 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="dashboard-shell">
-      <Sidebar userName={session.user.name} userEmail={session.user.email} />
-      <main className="dashboard-main">{children}</main>
+      <Sidebar
+        userName={session.user.name}
+        userEmail={session.user.email}
+        specialty={professionalSpecialty}
+        appointmentsToday={todayAppointments.length}
+      />
+      <main className="dashboard-main">
+        <TopBar userName={session.user.name || session.user.email} />
+        {children}
+      </main>
     </div>
   )
 }
