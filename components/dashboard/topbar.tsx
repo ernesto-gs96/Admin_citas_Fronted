@@ -18,15 +18,13 @@ export function TopBar({ userName, hasNotifications = true }: { userName: string
         <input type="search" placeholder="Buscar paciente o cita…" aria-label="Buscar paciente o cita" />
       </label>
 
-      
-
       <div className="dashboard-topbar-actions">
         <Link href="/dashboard/citas" className="light-button dashboard-topbar-cta">
           <ShareIcon />
           <span>Compartir enlace cita</span>
         </Link>
 
-        <Link href="/dashboard/citas" className="submit-button dashboard-topbar-cta">
+        <Link href="/dashboard/citas/nueva" className="submit-button dashboard-topbar-cta">
           <PlusIcon />
           <span>Nueva cita</span>
         </Link>
@@ -34,10 +32,6 @@ export function TopBar({ userName, hasNotifications = true }: { userName: string
         <button type="button" className="dashboard-icon-button" aria-label="Notificaciones">
           <BellIcon />
           {hasNotifications && <span className="dashboard-icon-dot" aria-hidden="true" />}
-        </button>
-
-        <button type="button" className="dashboard-icon-button" aria-label="Configuración">
-          <SettingsIcon />
         </button>
       </div>
     </div>

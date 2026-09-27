@@ -105,11 +105,6 @@ export function Sidebar({ userName, userEmail }: { userName?: string | null; use
           </div>
         </div>
 
-        <Link href="/dashboard/citas/nueva" className="sidebar-cta" onClick={() => setOpen(false)}>
-          <PlusIcon />
-          <span>Nueva cita</span>
-        </Link>
-
         <nav className="sidebar-nav" aria-label="Navegación principal">
           <div className="sidebar-nav-group">
             <span className="sidebar-nav-label">Principal</span>
