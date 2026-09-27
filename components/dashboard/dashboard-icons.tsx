@@ -368,7 +368,7 @@ export function ShareIcon() {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      stroke-width="1.5"
+      strokeWidth="1.5"
       stroke="currentColor"
       className="size-6"
     >
@@ -376,6 +376,168 @@ export function ShareIcon() {
         strokeLinejoin="round"
         d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
       />
+    </svg>
+  );
+}
+
+export function ClipboardIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 3.5H6A2.5 2.5 0 0 0 3.5 6v5.5a2 2 0 0 0 .6 1.4l8 8a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-8-8a2 2 0 0 0-1-.5Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function AlarmIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 3.5H6A2.5 2.5 0 0 0 3.5 6v5.5a2 2 0 0 0 .6 1.4l8 8a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-8-8a2 2 0 0 0-1-.5Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function ArrowRightIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 3.5H6A2.5 2.5 0 0 0 3.5 6v5.5a2 2 0 0 0 .6 1.4l8 8a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-8-8a2 2 0 0 0-1-.5Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function ShieldCheckIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 3.5H6A2.5 2.5 0 0 0 3.5 6v5.5a2 2 0 0 0 .6 1.4l8 8a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-8-8a2 2 0 0 0-1-.5Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function BuildingIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 3.5H6A2.5 2.5 0 0 0 3.5 6v5.5a2 2 0 0 0 .6 1.4l8 8a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-8-8a2 2 0 0 0-1-.5Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function CheckIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 3.5H6A2.5 2.5 0 0 0 3.5 6v5.5a2 2 0 0 0 .6 1.4l8 8a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-8-8a2 2 0 0 0-1-.5Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function HistoryIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 3.5H6A2.5 2.5 0 0 0 3.5 6v5.5a2 2 0 0 0 .6 1.4l8 8a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-8-8a2 2 0 0 0-1-.5Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function PhoneIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 3.5H6A2.5 2.5 0 0 0 3.5 6v5.5a2 2 0 0 0 .6 1.4l8 8a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-8-8a2 2 0 0 0-1-.5Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function RoomIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.5 3.5H6A2.5 2.5 0 0 0 3.5 6v5.5a2 2 0 0 0 .6 1.4l8 8a2 2 0 0 0 2.8 0l5.6-5.6a2 2 0 0 0 0-2.8l-8-8a2 2 0 0 0-1-.5Z"
+        strokeLinejoin="round"
+      />
+      <circle cx="8" cy="8" r="1.4" fill="currentColor" stroke="none" />
     </svg>
   );
 }
