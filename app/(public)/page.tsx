@@ -1,9 +1,6 @@
-'use client'
-
 import Link from 'next/link'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { authClient } from '@/lib/auth-client'
+import { redirect } from 'next/navigation'
+import { getSession } from '@/lib/auth-server'
 import { CalendarIcon, SettingsIcon, UsersIcon } from '@/components/dashboard/dashboard-icons'
 
 const FEATURES = [
@@ -24,15 +21,12 @@ const FEATURES = [
   },
 ]
 
-export default function LandingPage() {
-  const router = useRouter()
-  const { data: session, isPending } = authClient.useSession()
+export default async function LandingPage() {
+  const session = await getSession()
 
-  useEffect(() => {
-    if (!isPending && session?.user) {
-      router.replace('/dashboard')
-    }
-  }, [isPending, session, router])
+  if (session?.user) {
+    redirect('/dashboard')
+  }
 
   return (
     <main className="landing">
