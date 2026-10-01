@@ -1,11 +1,13 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { authClient } from '@/lib/auth-client'
 import { AuthShell } from './auth-shell'
-import { EyeIcon, MailIcon } from './auth-icons'
+import { EyeIcon } from './auth-icons'
 
 export function RegisterForm() {
+  const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -13,69 +15,42 @@ export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null)
-  const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent'>('idle')
+  const [infoMessage, setInfoMessage] = useState('')
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError('')
+    setInfoMessage('')
     if (!accepted) {
       setError('Acepta los términos y condiciones para crear tu cuenta.')
       return
     }
     setLoading(true)
     const result = await authClient.signUp.email({ name, email, password })
-    setLoading(false)
     if (result.error?.message) {
-      setError('No pudimos completar la solicitud. Revisa tus datos e inténtalo de nuevo.')
+      setLoading(false)
+      setError(result.error.message || 'No pudimos completar la solicitud. Revisa tus datos e inténtalo de nuevo.')
       return
     }
-    // Better Auth doesn't sign the user in until the address is confirmed, so show the
-    // "check your email" state here instead of redirecting into the app.
-    setSubmittedEmail(email)
-  }
 
-  async function handleResend() {
-    if (!submittedEmail) return
-    setResendState('sending')
-    try {
-      await authClient.sendVerificationEmail({ email: submittedEmail, callbackURL: '/dashboard' })
-      setResendState('sent')
-    } catch {
-      setResendState('idle')
+    // Iniciar sesión automáticamente en FastAPI Users tras el registro
+    const loginResult = await authClient.signIn.email({ email, password })
+    setLoading(false)
+
+    if (loginResult.error) {
+      if (loginResult.error.code === 'LOGIN_USER_NOT_VERIFIED' || loginResult.error.code === 'EMAIL_NOT_VERIFIED') {
+        setInfoMessage('¡Cuenta creada! Tu usuario requiere verificación antes de acceder.')
+      } else {
+        setInfoMessage('¡Cuenta creada con éxito! Redirigiendo al inicio de sesión…')
+        setTimeout(() => {
+          router.push('/login')
+        }, 1200)
+      }
+      return
     }
-  }
 
-  if (submittedEmail) {
-    return (
-      <AuthShell
-        mode="register"
-        eyebrow="UN ÚLTIMO PASO"
-        title="Confirma tu correo"
-        description="Falta un paso para activar tu cuenta."
-      >
-        <div className="verify-panel">
-          <span className="verify-icon"><MailIcon /></span>
-          <p>
-            Enviamos un enlace de confirmación a <strong>{submittedEmail}</strong>. Ábrelo desde
-            tu bandeja de entrada para activar tu cuenta y empezar a usar Agenda Clara.
-          </p>
-          <p>¿No llegó? Revisa spam o correo no deseado.</p>
-          <button
-            type="button"
-            className="verify-resend"
-            onClick={handleResend}
-            disabled={resendState !== 'idle'}
-          >
-            {resendState === 'sent' ? 'Correo reenviado' : resendState === 'sending' ? 'Enviando…' : 'Reenviar correo de confirmación'}
-          </button>
-        </div>
-
-        <p className="auth-footer">
-          ¿Ya confirmaste? <a className="text-link" href="/login">Inicia sesión</a>
-        </p>
-      </AuthShell>
-    )
+    router.push('/dashboard')
+    router.refresh()
   }
 
   return (
@@ -139,6 +114,7 @@ export function RegisterForm() {
         </label>
 
         {error && <p className="form-error" role="alert">{error}</p>}
+        {infoMessage && <p className="form-success" role="status" style={{ color: '#059669', fontSize: '0.9rem', margin: '0.25rem 0' }}>{infoMessage}</p>}
 
         <button className="submit-button" disabled={loading} type="submit">
           <span>{loading ? 'Procesando…' : 'Crear mi cuenta'}</span>

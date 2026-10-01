@@ -21,11 +21,10 @@ export function LoginForm() {
     const result = await authClient.signIn.email({ email, password })
     setLoading(false)
     if (result.error?.message) {
-      // Better Auth returns a dedicated code when the account exists but hasn't confirmed its email yet.
-      if (result.error.code === 'EMAIL_NOT_VERIFIED') {
+      if (result.error.code === 'EMAIL_NOT_VERIFIED' || result.error.code === 'LOGIN_USER_NOT_VERIFIED') {
         setError('Tu correo aún no está confirmado. Revisa tu bandeja de entrada para activar tu cuenta.')
       } else {
-        setError('No pudimos iniciar sesión. Revisa tus datos e inténtalo de nuevo.')
+        setError(result.error.message || 'No pudimos iniciar sesión. Revisa tus datos e inténtalo de nuevo.')
       }
       return
     }
