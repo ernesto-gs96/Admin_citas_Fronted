@@ -1,12 +1,5 @@
-import { redirect } from 'next/navigation'
-import { getSession } from '@/lib/auth-server'
 import { ForgotPasswordForm } from '@/components/auth/forgot-password-form'
 
-export default async function ForgotPasswordPage() {
-  const session = await getSession()
-  if (session?.user) {
-    redirect('/dashboard')
-  }
-
+export default function ForgotPasswordPage() {
   return <ForgotPasswordForm />
 }

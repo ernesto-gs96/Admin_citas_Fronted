@@ -1,6 +1,4 @@
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { getSession } from '@/lib/auth-server'
 import { CalendarIcon, SettingsIcon, UsersIcon } from '@/components/dashboard/dashboard-icons'
 
 const FEATURES = [
@@ -21,13 +19,7 @@ const FEATURES = [
   },
 ]
 
-export default async function LandingPage() {
-  const session = await getSession()
-
-  if (session?.user) {
-    redirect('/dashboard')
-  }
-
+export default function LandingPage() {
   return (
     <main className="landing">
       <section className="landing-hero">

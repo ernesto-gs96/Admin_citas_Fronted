@@ -1,14 +1,7 @@
 import { Suspense } from 'react'
-import { redirect } from 'next/navigation'
-import { getSession } from '@/lib/auth-server'
 import { LoginForm } from '@/components/auth/login-form'
 
-export default async function LoginPage() {
-  const session = await getSession()
-  if (session?.user) {
-    redirect('/dashboard')
-  }
-
+export default function LoginPage() {
   return (
     <Suspense fallback={null}>
       <LoginForm />
