@@ -1,7 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getCurrentUserAction, loginAction, logoutAction, registerAction } from './auth-actions'
+import {
+  forgotPasswordAction,
+  getCurrentUserAction,
+  loginAction,
+  logoutAction,
+  registerAction,
+  resetPasswordAction,
+} from './auth-actions'
 import type { User, Session } from './auth-server'
 
 export type { User, Session }
@@ -42,6 +49,24 @@ async function signOut(): Promise<void> {
   await logoutAction()
 }
 
+async function forgotPassword({
+  email,
+}: {
+  email: string
+}): Promise<AuthResponse<{ success: boolean }>> {
+  return await forgotPasswordAction({ email })
+}
+
+async function resetPassword({
+  token,
+  password,
+}: {
+  token: string
+  password: string
+}): Promise<AuthResponse<{ success: boolean }>> {
+  return await resetPasswordAction({ token, password })
+}
+
 export function useSession() {
   const [session, setSession] = useState<Session | null>(null)
   const [isPending, setIsPending] = useState(true)
@@ -80,5 +105,7 @@ export const authClient = {
     email: signUpEmail,
   },
   signOut,
+  forgotPassword,
+  resetPassword,
   useSession,
 }

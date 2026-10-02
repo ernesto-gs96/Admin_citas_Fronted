@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/auth-server'
-import { LoginForm } from '@/components/auth/login-form'
+import { ResetPasswordForm } from '@/components/auth/reset-password-form'
 
-export default async function LoginPage() {
+export default async function ResetPasswordPage() {
   const session = await getSession()
   if (session?.user) {
     redirect('/dashboard')
@@ -11,7 +11,7 @@ export default async function LoginPage() {
 
   return (
     <Suspense fallback={null}>
-      <LoginForm />
+      <ResetPasswordForm />
     </Suspense>
   )
 }

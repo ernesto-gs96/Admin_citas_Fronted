@@ -1,13 +1,17 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { authClient } from '@/lib/auth-client'
 import { AuthShell } from './auth-shell'
 import { EyeIcon } from './auth-icons'
 
 export function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const isResetSuccess = searchParams.get('reset') === 'success'
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -40,6 +44,25 @@ export function LoginForm() {
       description="Accede para administrar tu día con claridad."
     >
       <form onSubmit={handleSubmit} className="auth-form">
+        {isResetSuccess && (
+          <p
+            className="form-success"
+            role="status"
+            style={{
+              margin: '-2px 0 4px',
+              padding: '10px 12px',
+              border: '1px solid #a7f3d0',
+              borderRadius: 'var(--radius-sm)',
+              color: '#065f46',
+              background: '#ecfdf5',
+              fontSize: '12.5px',
+              lineHeight: '1.5',
+            }}
+          >
+            ✓ Tu contraseña se ha actualizado con éxito. Ya puedes iniciar sesión.
+          </p>
+        )}
+
         <label className="field">
           <span>Correo electrónico</span>
           <input
@@ -75,6 +98,12 @@ export function LoginForm() {
           </span>
         </label>
 
+        <div className="form-options" style={{ justifyContent: 'flex-end', marginTop: '-4px' }}>
+          <Link href="/forgot-password" className="text-link" style={{ fontSize: '12.5px' }}>
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </div>
+
         {error && <p className="form-error" role="alert">{error}</p>}
 
         <button className="submit-button" disabled={loading} type="submit">
@@ -84,7 +113,7 @@ export function LoginForm() {
       </form>
 
       <p className="auth-footer">
-        ¿Aún no usas Agenda Clara? <a className="text-link" href="/register">Crea tu cuenta</a>
+        ¿Aún no usas Agenda Clara? <Link className="text-link" href="/register">Crea tu cuenta</Link>
       </p>
     </AuthShell>
   )

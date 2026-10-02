@@ -287,3 +287,131 @@ export async function getCurrentUserAction(): Promise<User | null> {
     name: email.split('@')[0],
   }
 }
+
+export async function forgotPasswordAction({
+  email,
+}: {
+  email: string
+}): Promise<ActionResult<{ success: boolean }>> {
+  try {
+    const res = await fetch(`${getFastApiUrl()}/api/auth/forgot-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+      cache: 'no-store',
+    })
+
+    // FastAPI Users devuelve 202 Accepted en éxito
+    if (res.status === 202 || res.ok) {
+      return {
+        data: { success: true },
+        error: null,
+      }
+    }
+
+    if (res.status === 422) {
+      return {
+        data: null,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Por favor ingresa un correo electrónico válido.',
+        },
+      }
+    }
+
+    const errorData = await res.json().catch(() => null)
+    return {
+      data: null,
+      error: {
+        code: 'FORGOT_PASSWORD_ERROR',
+        message: errorData?.detail || 'No se pudo procesar la solicitud de recuperación.',
+      },
+    }
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: 'NETWORK_ERROR',
+        message: 'No pudimos conectar con el servidor. Verifica que el backend esté en ejecución.',
+      },
+    }
+  }
+}
+
+export async function resetPasswordAction({
+  token,
+  password,
+}: {
+  token: string
+  password: string
+}): Promise<ActionResult<{ success: boolean }>> {
+  try {
+    const res = await fetch(`${getFastApiUrl()}/api/auth/reset-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, password }),
+      cache: 'no-store',
+    })
+
+    if (res.ok) {
+      return {
+        data: { success: true },
+        error: null,
+      }
+    }
+
+    const errorData = await res.json().catch(() => null)
+    const detail = errorData?.detail
+
+    if (res.status === 400) {
+      if (detail === 'RESET_PASSWORD_BAD_TOKEN') {
+        return {
+          data: null,
+          error: {
+            code: 'RESET_PASSWORD_BAD_TOKEN',
+            message: 'El token o enlace de recuperación es inválido o ha expirado. Por favor solicita uno nuevo.',
+          },
+        }
+      }
+      if (detail === 'RESET_PASSWORD_INVALID_PASSWORD') {
+        return {
+          data: null,
+          error: {
+            code: 'RESET_PASSWORD_INVALID_PASSWORD',
+            message: 'La nueva contraseña no cumple con los requisitos de seguridad.',
+          },
+        }
+      }
+    }
+
+    if (res.status === 422) {
+      return {
+        data: null,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Por favor completa todos los campos requeridos correctamente.',
+        },
+      }
+    }
+
+    return {
+      data: null,
+      error: {
+        code: 'RESET_PASSWORD_ERROR',
+        message: typeof detail === 'string' ? detail : 'No pudimos restablecer la contraseña.',
+      },
+    }
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: 'NETWORK_ERROR',
+        message: 'No pudimos conectar con el servidor de autenticación.',
+      },
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
-type Mode = 'login' | 'register'
+type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'
 
 export function AuthShell({
   mode,
@@ -9,12 +9,14 @@ export function AuthShell({
   title,
   description,
   children,
+  showTabs = mode === 'login' || mode === 'register',
 }: {
   mode: Mode
   eyebrow: string
   title: string
   description: string
   children: ReactNode
+  showTabs?: boolean
 }) {
   const isRegister = mode === 'register'
 
@@ -28,14 +30,16 @@ export function AuthShell({
             <p>{description}</p>
           </div>
 
-          <nav className="auth-tabs" aria-label="Tipo de acceso">
-            <Link href="/login" aria-current={!isRegister ? 'page' : undefined} className={!isRegister ? 'active' : ''}>
-              Iniciar sesión
-            </Link>
-            <Link href="/register" aria-current={isRegister ? 'page' : undefined} className={isRegister ? 'active' : ''}>
-              Crear cuenta
-            </Link>
-          </nav>
+          {showTabs && (
+            <nav className="auth-tabs" aria-label="Tipo de acceso">
+              <Link href="/login" aria-current={!isRegister ? 'page' : undefined} className={!isRegister ? 'active' : ''}>
+                Iniciar sesión
+              </Link>
+              <Link href="/register" aria-current={isRegister ? 'page' : undefined} className={isRegister ? 'active' : ''}>
+                Crear cuenta
+              </Link>
+            </nav>
+          )}
 
           {children}
         </section>
