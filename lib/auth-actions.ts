@@ -205,29 +205,6 @@ export async function registerAction({
       name: name?.trim() || email.split('@')[0],
     }
 
-    // Intentar inicio de sesión automático tras el registro en el servidor
-    const loginRes = await loginAction({ email, password })
-
-    if (!loginRes.error && loginRes.data) {
-      // Actualizar cookie httpOnly con el nombre del usuario
-      const cookieStore = await cookies()
-      const maxAge = 7 * 24 * 60 * 60
-      const isProduction = process.env.NODE_ENV === 'production'
-
-      cookieStore.set('auth_user', JSON.stringify(user), {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: 'lax',
-        path: '/',
-        maxAge,
-      })
-
-      return {
-        data: { user, autoLoggedIn: true },
-        error: null,
-      }
-    }
-
     return {
       data: { user, autoLoggedIn: false },
       error: null,
@@ -403,6 +380,132 @@ export async function resetPasswordAction({
       error: {
         code: 'RESET_PASSWORD_ERROR',
         message: typeof detail === 'string' ? detail : 'No pudimos restablecer la contraseña.',
+      },
+    }
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: 'NETWORK_ERROR',
+        message: 'No pudimos conectar con el servidor de autenticación.',
+      },
+    }
+  }
+}
+
+export async function verifyEmailAction({
+  token,
+}: {
+  token: string
+}): Promise<ActionResult<{ user: User }>> {
+  try {
+    const res = await fetch(`${getFastApiUrl()}/api/auth/verify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
+      cache: 'no-store',
+    })
+
+    if (res.ok) {
+      const user = await res.json()
+      return {
+        data: { user },
+        error: null,
+      }
+    }
+
+    const errorData = await res.json().catch(() => null)
+    const detail = errorData?.detail
+
+    if (res.status === 400) {
+      if (detail === 'VERIFY_USER_BAD_TOKEN') {
+        return {
+          data: null,
+          error: {
+            code: 'VERIFY_USER_BAD_TOKEN',
+            message: 'El enlace o token de verificación es inválido o ha expirado.',
+          },
+        }
+      }
+      if (detail === 'VERIFY_USER_ALREADY_VERIFIED') {
+        return {
+          data: null,
+          error: {
+            code: 'VERIFY_USER_ALREADY_VERIFIED',
+            message: 'Tu correo ya se encuentra verificado. Puedes iniciar sesión.',
+          },
+        }
+      }
+    }
+
+    if (res.status === 422) {
+      return {
+        data: null,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'El formato del token no es válido.',
+        },
+      }
+    }
+
+    return {
+      data: null,
+      error: {
+        code: 'VERIFY_ERROR',
+        message: typeof detail === 'string' ? detail : 'No pudimos verificar tu correo.',
+      },
+    }
+  } catch {
+    return {
+      data: null,
+      error: {
+        code: 'NETWORK_ERROR',
+        message: 'No pudimos conectar con el servidor de autenticación.',
+      },
+    }
+  }
+}
+
+export async function requestVerifyTokenAction({
+  email,
+}: {
+  email: string
+}): Promise<ActionResult<{ success: boolean }>> {
+  try {
+    const res = await fetch(`${getFastApiUrl()}/api/auth/request-verify-token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+      cache: 'no-store',
+    })
+
+    if (res.status === 202 || res.ok) {
+      return {
+        data: { success: true },
+        error: null,
+      }
+    }
+
+    if (res.status === 422) {
+      return {
+        data: null,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Por favor ingresa un correo electrónico válido.',
+        },
+      }
+    }
+
+    const errorData = await res.json().catch(() => null)
+    return {
+      data: null,
+      error: {
+        code: 'REQUEST_VERIFY_ERROR',
+        message: errorData?.detail || 'No se pudo enviar el correo de verificación.',
       },
     }
   } catch {

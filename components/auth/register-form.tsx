@@ -1,13 +1,12 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { authClient } from '@/lib/auth-client'
 import { AuthShell } from './auth-shell'
-import { EyeIcon } from './auth-icons'
+import { EyeIcon, MailIcon } from './auth-icons'
 
 export function RegisterForm() {
-  const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,42 +14,80 @@ export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [infoMessage, setInfoMessage] = useState('')
+  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null)
+  const [resendState, setResendState] = useState<'idle' | 'sending' | 'sent'>('idle')
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError('')
-    setInfoMessage('')
     if (!accepted) {
       setError('Acepta los términos y condiciones para crear tu cuenta.')
       return
     }
+
     setLoading(true)
     const result = await authClient.signUp.email({ name, email, password })
+    setLoading(false)
+
     if (result.error?.message) {
-      setLoading(false)
       setError(result.error.message || 'No pudimos completar la solicitud. Revisa tus datos e inténtalo de nuevo.')
       return
     }
 
-    // Iniciar sesión automáticamente en FastAPI Users tras el registro
-    const loginResult = await authClient.signIn.email({ email, password })
-    setLoading(false)
+    // El backend ahora envía correo de verificación. Mostramos pantalla de confirmación.
+    setSubmittedEmail(email)
+  }
 
-    if (loginResult.error) {
-      if (loginResult.error.code === 'LOGIN_USER_NOT_VERIFIED' || loginResult.error.code === 'EMAIL_NOT_VERIFIED') {
-        setInfoMessage('¡Cuenta creada! Tu usuario requiere verificación antes de acceder.')
-      } else {
-        setInfoMessage('¡Cuenta creada con éxito! Redirigiendo al inicio de sesión…')
-        setTimeout(() => {
-          router.push('/login')
-        }, 1200)
-      }
-      return
+  async function handleResend() {
+    if (!submittedEmail) return
+    setResendState('sending')
+    const result = await authClient.requestVerifyToken({ email: submittedEmail })
+    if (result.error) {
+      setResendState('idle')
+    } else {
+      setResendState('sent')
+      setTimeout(() => setResendState('idle'), 5000)
     }
+  }
 
-    router.push('/dashboard')
-    router.refresh()
+  if (submittedEmail) {
+    return (
+      <AuthShell
+        mode="register"
+        eyebrow="UN ÚLTIMO PASO"
+        title="Confirma tu correo"
+        description="Falta un paso para activar tu cuenta."
+        showTabs={false}
+      >
+        <div className="verify-panel">
+          <span className="verify-icon">
+            <MailIcon />
+          </span>
+          <p>
+            Hemos enviado un enlace de confirmación a <strong>{submittedEmail}</strong>.
+            Ábrelo desde tu bandeja de entrada para verificar tu cuenta y poder ingresar a tu agenda.
+          </p>
+          <p>¿No llegó el correo? Revisa en spam o correo no deseado.</p>
+
+          <button
+            type="button"
+            className="verify-resend"
+            onClick={handleResend}
+            disabled={resendState !== 'idle'}
+          >
+            {resendState === 'sent'
+              ? '✓ Correo reenviado'
+              : resendState === 'sending'
+              ? 'Enviando…'
+              : 'Reenviar correo de confirmación'}
+          </button>
+        </div>
+
+        <p className="auth-footer">
+          ¿Ya verificaste tu cuenta? <Link className="text-link" href="/login">Inicia sesión</Link>
+        </p>
+      </AuthShell>
+    )
   }
 
   return (
@@ -114,7 +151,6 @@ export function RegisterForm() {
         </label>
 
         {error && <p className="form-error" role="alert">{error}</p>}
-        {infoMessage && <p className="form-success" role="status" style={{ color: '#059669', fontSize: '0.9rem', margin: '0.25rem 0' }}>{infoMessage}</p>}
 
         <button className="submit-button" disabled={loading} type="submit">
           <span>{loading ? 'Procesando…' : 'Crear mi cuenta'}</span>
@@ -123,7 +159,7 @@ export function RegisterForm() {
       </form>
 
       <p className="auth-footer">
-        ¿Ya tienes una cuenta? <a className="text-link" href="/login">Inicia sesión</a>
+        ¿Ya tienes una cuenta? <Link className="text-link" href="/login">Inicia sesión</Link>
       </p>
     </AuthShell>
   )

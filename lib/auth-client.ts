@@ -7,7 +7,9 @@ import {
   loginAction,
   logoutAction,
   registerAction,
+  requestVerifyTokenAction,
   resetPasswordAction,
+  verifyEmailAction,
 } from './auth-actions'
 import type { User, Session } from './auth-server'
 
@@ -41,7 +43,7 @@ async function signUpEmail({
   email: string
   password: string
   name?: string
-}): Promise<AuthResponse<{ user: User; autoLoggedIn: boolean }>> {
+}): Promise<AuthResponse<{ user: User }>> {
   return await registerAction({ email, password, name })
 }
 
@@ -65,6 +67,22 @@ async function resetPassword({
   password: string
 }): Promise<AuthResponse<{ success: boolean }>> {
   return await resetPasswordAction({ token, password })
+}
+
+async function verifyEmail({
+  token,
+}: {
+  token: string
+}): Promise<AuthResponse<{ user: User }>> {
+  return await verifyEmailAction({ token })
+}
+
+async function requestVerifyToken({
+  email,
+}: {
+  email: string
+}): Promise<AuthResponse<{ success: boolean }>> {
+  return await requestVerifyTokenAction({ email })
 }
 
 export function useSession() {
@@ -107,5 +125,7 @@ export const authClient = {
   signOut,
   forgotPassword,
   resetPassword,
+  verifyEmail,
+  requestVerifyToken,
   useSession,
 }

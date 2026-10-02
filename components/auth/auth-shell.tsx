@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ReactNode } from 'react'
 
-type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password'
+type Mode = 'login' | 'register' | 'forgot-password' | 'reset-password' | 'verify-email'
 
 export function AuthShell({
   mode,
