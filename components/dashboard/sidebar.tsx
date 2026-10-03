@@ -22,6 +22,7 @@ export function Sidebar({ userName, userEmail }: { userName?: string | null; use
   async function handleSignOut() {
     await authClient.signOut()
     router.replace('/login')
+    router.refresh()
   }
 
   return (

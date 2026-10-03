@@ -1,26 +1,13 @@
-'use client'
-
-import { ReactNode, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { authClient } from '@/lib/auth-client'
+import { ReactNode } from 'react'
+import { redirect } from 'next/navigation'
+import { getSession } from '@/lib/auth-server'
 import { Sidebar } from '@/components/dashboard/sidebar'
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const router = useRouter()
-  const { data: session, isPending } = authClient.useSession()
-
-  useEffect(() => {
-    if (!isPending && !session?.user) {
-      router.replace('/login')
-    }
-  }, [isPending, session, router])
-
-  if (isPending) {
-    return <main className="signed-in-shell"><p>Cargando…</p></main>
-  }
+export default async function DashboardLayout({ children }: { children: ReactNode }) {
+  const session = await getSession()
 
   if (!session?.user) {
-    return null
+    redirect('/login')
   }
 
   return (

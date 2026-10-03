@@ -1,6 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
+import Link from 'next/link'
 import { authClient } from '@/lib/auth-client'
 import { AuthShell } from './auth-shell'
 import { EyeIcon, MailIcon } from './auth-icons'
@@ -23,26 +24,29 @@ export function RegisterForm() {
       setError('Acepta los términos y condiciones para crear tu cuenta.')
       return
     }
+
     setLoading(true)
     const result = await authClient.signUp.email({ name, email, password })
     setLoading(false)
+
     if (result.error?.message) {
-      setError('No pudimos completar la solicitud. Revisa tus datos e inténtalo de nuevo.')
+      setError(result.error.message || 'No pudimos completar la solicitud. Revisa tus datos e inténtalo de nuevo.')
       return
     }
-    // Better Auth doesn't sign the user in until the address is confirmed, so show the
-    // "check your email" state here instead of redirecting into the app.
+
+    // El backend ahora envía correo de verificación. Mostramos pantalla de confirmación.
     setSubmittedEmail(email)
   }
 
   async function handleResend() {
     if (!submittedEmail) return
     setResendState('sending')
-    try {
-      await authClient.sendVerificationEmail({ email: submittedEmail, callbackURL: '/dashboard' })
-      setResendState('sent')
-    } catch {
+    const result = await authClient.requestVerifyToken({ email: submittedEmail })
+    if (result.error) {
       setResendState('idle')
+    } else {
+      setResendState('sent')
+      setTimeout(() => setResendState('idle'), 5000)
     }
   }
 
@@ -53,26 +57,34 @@ export function RegisterForm() {
         eyebrow="UN ÚLTIMO PASO"
         title="Confirma tu correo"
         description="Falta un paso para activar tu cuenta."
+        showTabs={false}
       >
         <div className="verify-panel">
-          <span className="verify-icon"><MailIcon /></span>
+          <span className="verify-icon">
+            <MailIcon />
+          </span>
           <p>
-            Enviamos un enlace de confirmación a <strong>{submittedEmail}</strong>. Ábrelo desde
-            tu bandeja de entrada para activar tu cuenta y empezar a usar Agenda Clara.
+            Hemos enviado un enlace de confirmación a <strong>{submittedEmail}</strong>.
+            Ábrelo desde tu bandeja de entrada para verificar tu cuenta y poder ingresar a tu agenda.
           </p>
-          <p>¿No llegó? Revisa spam o correo no deseado.</p>
+          <p>¿No llegó el correo? Revisa en spam o correo no deseado.</p>
+
           <button
             type="button"
             className="verify-resend"
             onClick={handleResend}
             disabled={resendState !== 'idle'}
           >
-            {resendState === 'sent' ? 'Correo reenviado' : resendState === 'sending' ? 'Enviando…' : 'Reenviar correo de confirmación'}
+            {resendState === 'sent'
+              ? '✓ Correo reenviado'
+              : resendState === 'sending'
+              ? 'Enviando…'
+              : 'Reenviar correo de confirmación'}
           </button>
         </div>
 
         <p className="auth-footer">
-          ¿Ya confirmaste? <a className="text-link" href="/login">Inicia sesión</a>
+          ¿Ya verificaste tu cuenta? <Link className="text-link" href="/login">Inicia sesión</Link>
         </p>
       </AuthShell>
     )
@@ -147,7 +159,7 @@ export function RegisterForm() {
       </form>
 
       <p className="auth-footer">
-        ¿Ya tienes una cuenta? <a className="text-link" href="/login">Inicia sesión</a>
+        ¿Ya tienes una cuenta? <Link className="text-link" href="/login">Inicia sesión</Link>
       </p>
     </AuthShell>
   )
