@@ -1,8 +1,5 @@
-"use client";
 import Link from "next/link";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
+
 import {
   CalendarIcon,
   SettingsIcon,
@@ -142,12 +139,6 @@ const PROBLEM_MESSAGES = [
 ] as const;
 
 export default function LandingPage() {
-  const router = useRouter();
-  const { data: session, isPending } = authClient.useSession();
-  useEffect(() => {
-    if (!isPending && session?.user) router.replace("/dashboard");
-  }, [isPending, session, router]);
-
   return (
     <main className="landing">
       {/* Hero */}

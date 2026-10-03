@@ -35,7 +35,7 @@ export function AuthScreen() {
     setLoading(true)
     const result = isRegister ? await authClient.signUp.email({ name, email, password }) : await authClient.signIn.email({ email, password })
     setLoading(false)
-    if (result.error?.message) { setError('No pudimos completar la solicitud. Revisa tus datos e inténtalo de nuevo.'); return }
+    if (result.error?.message) { setError(result.error.message || 'No pudimos completar la solicitud. Revisa tus datos e inténtalo de nuevo.'); return }
     router.push('/')
     router.refresh()
   }
