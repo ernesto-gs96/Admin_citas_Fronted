@@ -2235,3 +2235,147 @@ input:focus-visible,
   .pacientes-row-cita { justify-content: flex-start; }
   .pacientes-row-condicion { justify-content: flex-start; }
 }
+
+/* =========================================================================
+   FICHA DETALLADA DEL PACIENTE (/dashboard/pacientes/[id])
+   Pegar este bloque al final de globals.css, DESPUÉS de pacientes.css
+   (reutiliza .pacientes-avatar tints y tokens de :root).
+   ========================================================================= */
+
+.paciente-detalle-canvas { display: flex; flex-direction: column; gap: 16px; }
+
+.paciente-detalle-back { display: inline-flex; align-items: center; gap: 7px; width: fit-content; font-size: 12.5px; font-weight: 600; color: var(--muted); text-decoration: none; }
+.paciente-detalle-back:hover { color: var(--ink); }
+.paciente-detalle-back svg { width: 16px; height: 16px; }
+
+.paciente-detalle-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+.paciente-detalle-head-title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.paciente-detalle-head-title h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
+
+.paciente-detalle-estado { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.paciente-detalle-estado span { width: 5px; height: 5px; border-radius: 50%; }
+.paciente-detalle-estado.estado-activa { background: rgba(25, 128, 56, 0.1); color: #178a4e; }
+.paciente-detalle-estado.estado-activa span { background: #178a4e; }
+.paciente-detalle-estado.estado-inactiva { background: var(--canvas); color: var(--muted); }
+.paciente-detalle-estado.estado-inactiva span { background: var(--muted-2); }
+
+.paciente-detalle-agendar { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 16px; border-radius: var(--radius-sm); background: var(--brand); color: #fff; font-size: 12.5px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 6px rgba(15, 98, 254, 0.22); }
+.paciente-detalle-agendar:hover { background: var(--brand-dark); }
+.paciente-detalle-agendar svg { width: 16px; height: 16px; }
+
+/* ---------- Grid de 2 columnas ---------- */
+
+.paciente-detalle-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 20px; align-items: start; }
+.paciente-detalle-col-left,
+.paciente-detalle-col-right { min-width: 0; }
+
+/* ---------- Columna izquierda: tarjeta de perfil ---------- */
+
+.paciente-detalle-card { display: flex; flex-direction: column; gap: 18px; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+
+.paciente-detalle-identity { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.paciente-detalle-avatar { display: grid; place-items: center; width: 76px; height: 76px; border-radius: 50%; font-size: 22px; font-weight: 700; box-shadow: 0 0 0 4px var(--canvas); }
+.paciente-detalle-avatar.tint-brand { background: var(--brand-soft); color: var(--brand-dark); }
+.paciente-detalle-avatar.tint-secondary { background: #e0f2fe; color: #0369a1; }
+.paciente-detalle-avatar.tint-tertiary { background: rgba(25, 128, 56, 0.12); color: #178a4e; }
+.paciente-detalle-avatar.tint-neutral { background: var(--canvas); color: var(--muted); }
+.paciente-detalle-identity h2 { margin: 0; font-size: 16.5px; font-weight: 700; color: var(--ink); }
+.paciente-detalle-identity p { margin: 2px 0 0; font-size: 11.5px; color: var(--muted-2); }
+.paciente-detalle-identity p span { color: var(--brand-dark); font-weight: 600; }
+
+.paciente-detalle-info { display: flex; flex-direction: column; gap: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+.paciente-detalle-info-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12.5px; }
+.paciente-detalle-info-row.is-align-start { align-items: flex-start; }
+.paciente-detalle-info-row > span:first-child { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); flex-shrink: 0; }
+.paciente-detalle-info-row > span:first-child svg { width: 15px; height: 15px; color: var(--muted-2); }
+.paciente-detalle-info-row strong { font-weight: 600; color: var(--ink); text-align: right; }
+.paciente-detalle-right { text-align: right; }
+.paciente-detalle-truncate { max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.paciente-detalle-info-value-group { display: inline-flex; align-items: center; gap: 8px; }
+.paciente-detalle-whatsapp { display: grid; place-items: center; color: #178a4e; }
+.paciente-detalle-whatsapp:hover { color: #0f6b38; }
+.paciente-detalle-whatsapp svg { width: 15px; height: 15px; }
+
+.paciente-detalle-edit-btn { display: flex; align-items: center; justify-content: center; gap: 7px; padding-top: 14px; border: 0; border-top: 1px solid var(--line); color: var(--ink); font-size: 12.5px; font-weight: 700; text-decoration: none; }
+.paciente-detalle-edit-btn:hover { color: var(--brand-dark); }
+.paciente-detalle-edit-btn svg { width: 15px; height: 15px; color: var(--muted-2); }
+
+/* ---------- Columna derecha: tabs ---------- */
+
+.paciente-tabs-wrap { display: flex; flex-direction: column; gap: 16px; }
+.paciente-tabs-bar { display: flex; align-items: center; gap: 26px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.paciente-tabs-bar button { display: inline-flex; align-items: center; gap: 7px; padding-bottom: 11px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.paciente-tabs-bar button:hover { color: var(--ink); }
+.paciente-tabs-bar button.active { color: var(--brand-dark); border-bottom-color: var(--brand); font-weight: 700; }
+.paciente-tabs-bar svg { width: 16px; height: 16px; }
+.paciente-tabs-count { padding: 1px 8px; border-radius: 999px; background: var(--brand-soft); color: var(--brand-dark); font-size: 10.5px; font-weight: 700; }
+
+/* ---------- Timeline de citas ---------- */
+
+.paciente-timeline { display: flex; flex-direction: column; gap: 12px; }
+.paciente-cita-card { display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+.paciente-cita-card.is-proxima { border-left: 4px solid var(--brand); }
+
+.paciente-cita-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.paciente-cita-badges { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.paciente-cita-estado { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.paciente-cita-estado span { width: 5px; height: 5px; border-radius: 50%; }
+.paciente-cita-estado.estado-confirmada { background: rgba(25, 128, 56, 0.1); color: #178a4e; border: 1px solid rgba(25, 128, 56, 0.25); }
+.paciente-cita-estado.estado-confirmada span { background: #178a4e; }
+.paciente-cita-estado.estado-completada { background: var(--canvas); color: var(--muted); border: 1px solid var(--line); }
+.paciente-cita-estado.estado-completada span { background: var(--muted-2); }
+.paciente-cita-estado.estado-pendiente { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.paciente-cita-estado.estado-pendiente span { background: #92400e; }
+.paciente-cita-estado.estado-cancelada { background: var(--danger-soft); color: var(--danger); border: 1px solid transparent; }
+.paciente-cita-estado.estado-cancelada span { background: var(--danger); }
+.paciente-cita-modalidad { padding: 2px 8px; border-radius: 4px; background: var(--brand-soft); color: var(--brand-dark); font-size: 11px; font-weight: 600; }
+.paciente-cita-fecha { font-size: 11.5px; color: var(--muted-2); font-weight: 600; }
+.paciente-cita-fecha.is-proxima { color: var(--brand-dark); font-weight: 700; }
+
+.paciente-cita-card h3 { margin: 0; font-size: 14.5px; font-weight: 700; color: var(--ink); }
+.paciente-cita-card p { margin: 3px 0 0; font-size: 12.5px; color: var(--muted); }
+
+.paciente-cita-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.paciente-cita-medico { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
+.paciente-cita-medico svg { width: 15px; height: 15px; color: var(--muted-2); }
+.paciente-cita-medico strong { color: var(--ink); font-weight: 600; }
+
+.paciente-cita-actions { display: flex; align-items: center; gap: 8px; }
+.paciente-cita-btn-outline { height: 30px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font-size: 11.5px; font-weight: 600; }
+.paciente-cita-btn-outline:hover { background: var(--canvas); }
+.paciente-cita-btn-primary { height: 30px; padding: 0 12px; border: 0; border-radius: var(--radius-sm); background: var(--brand); color: #fff; font-size: 11.5px; font-weight: 700; }
+.paciente-cita-btn-primary:hover { background: var(--brand-dark); }
+.paciente-cita-link { display: inline-flex; align-items: center; gap: 5px; border: 0; background: transparent; color: var(--brand-dark); font-size: 11.5px; font-weight: 700; }
+.paciente-cita-link:hover { text-decoration: underline; }
+.paciente-cita-link svg { width: 13px; height: 13px; }
+
+/* ---------- Estudios / Recetas: cabecera de sección y empty state ---------- */
+
+.paciente-tab-section { display: flex; flex-direction: column; gap: 12px; }
+.paciente-tab-section-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.paciente-tab-section-head h3 { margin: 0; font-size: 14.5px; font-weight: 700; color: var(--ink); }
+.paciente-tab-add-link { display: inline-flex; align-items: center; gap: 5px; border: 0; background: transparent; color: var(--brand-dark); font-size: 11.5px; font-weight: 700; }
+.paciente-tab-add-link:hover { text-decoration: underline; }
+.paciente-tab-add-link svg { width: 15px; height: 15px; }
+
+.paciente-tab-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 40px 24px; border: 1px dashed var(--line-strong); border-radius: var(--radius-lg); background: var(--surface); text-align: center; }
+.paciente-tab-empty > span { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--canvas); color: var(--muted-2); }
+.paciente-tab-empty > span svg { width: 22px; height: 22px; }
+.paciente-tab-empty-title { margin: 0; font-size: 14px; font-weight: 700; color: var(--ink); }
+.paciente-tab-empty-desc { margin: 0; max-width: 420px; font-size: 11.5px; color: var(--muted-2); line-height: 1.5; }
+.paciente-tab-empty-btn { display: inline-flex; align-items: center; gap: 7px; margin-top: 4px; height: 34px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink); font-size: 12px; font-weight: 600; }
+.paciente-tab-empty-btn:hover { background: var(--canvas); }
+.paciente-tab-empty-btn svg { width: 15px; height: 15px; color: var(--brand); }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+  .paciente-detalle-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .paciente-tabs-bar { gap: 16px; }
+  .paciente-tabs-bar span:last-child.paciente-tabs-count { display: none; }
+  .paciente-cita-foot { flex-direction: column; align-items: stretch; }
+  .paciente-cita-actions { justify-content: flex-end; }
+}
