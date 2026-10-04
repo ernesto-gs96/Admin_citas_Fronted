@@ -2173,6 +2173,52 @@ input:focus-visible,
 .paciente-ficha-edit:hover { color: var(--brand-dark); }
 .paciente-ficha-edit svg { width: 13px; height: 13px; }
 
+/* ---------- Modal: Nuevo Paciente ---------- */
+
+.pacientes-modal-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(15, 23, 42, 0.35); backdrop-filter: blur(3px); }
+
+.pacientes-modal { width: 100%; max-width: 520px; max-height: calc(100vh - 32px); overflow-y: auto; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22); padding: 22px; }
+
+.pacientes-modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+.pacientes-modal-head h2 { margin: 0; font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: -0.01em; }
+.pacientes-modal-head p { margin: 3px 0 0; font-size: 12px; color: var(--muted); }
+.pacientes-modal-close { display: grid; place-items: center; width: 30px; height: 30px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--muted-2); flex-shrink: 0; }
+.pacientes-modal-close:hover { background: var(--canvas); color: var(--ink); }
+.pacientes-modal-close svg { width: 17px; height: 17px; }
+
+.pacientes-modal-form { display: flex; flex-direction: column; gap: 16px; }
+
+.pacientes-field { display: flex; flex-direction: column; gap: 6px; }
+.pacientes-field label { font-size: 12px; font-weight: 700; color: var(--ink); }
+.pacientes-field input {
+  height: 38px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--canvas);
+  color: var(--ink);
+  font-size: 13px;
+}
+.pacientes-field input:focus { outline: none; border-color: var(--brand); background: var(--surface); box-shadow: 0 0 0 3px var(--brand-soft); }
+.pacientes-field input::placeholder { color: var(--muted-2); }
+.pacientes-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.pacientes-gender-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.pacientes-gender-chip { display: flex; align-items: center; justify-content: center; gap: 6px; height: 38px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--canvas); color: var(--muted); font-size: 12px; font-weight: 600; }
+.pacientes-gender-chip:hover { background: var(--surface); }
+.pacientes-gender-chip svg { width: 15px; height: 15px; }
+.pacientes-gender-chip.is-active { border-color: var(--brand); background: var(--brand-soft); color: var(--brand-dark); }
+
+.pacientes-input-icon { position: relative; display: flex; align-items: center; }
+.pacientes-input-icon svg { position: absolute; left: 10px; width: 15px; height: 15px; color: var(--muted-2); pointer-events: none; }
+.pacientes-input-icon input { width: 100%; padding-left: 32px; }
+
+.pacientes-modal-hint { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 11px; color: var(--muted-2); }
+.pacientes-modal-hint svg { width: 13px; height: 13px; flex-shrink: 0; }
+.pacientes-modal-hint.is-error { color: var(--danger); }
+
+.pacientes-modal-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 14px; margin-top: 2px; border-top: 1px solid var(--line); }
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 1100px) {

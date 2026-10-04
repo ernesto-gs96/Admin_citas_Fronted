@@ -36,6 +36,34 @@ export function ChatIcon() {
   )
 }
 
+export function FemaleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="9" r="5.5" />
+      <path d="M12 14.5V21M8.5 18h7" />
+    </svg>
+  )
+}
+
+export function MaleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="10" cy="14" r="5.5" />
+      <path d="M14 10l6-6M14 4h6v6" />
+    </svg>
+  )
+}
+
+export function MoreHorizIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <circle cx="5" cy="12" r="1.6" />
+      <circle cx="12" cy="12" r="1.6" />
+      <circle cx="19" cy="12" r="1.6" />
+    </svg>
+  )
+}
+
 export function EventIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">

@@ -6,9 +6,10 @@ import { DownloadIcon, PersonAddIcon } from './servicios-icons'
 
 interface PacientesHeaderProps {
   onExportar: () => void
+  onNuevoPaciente: () => void
 }
 
-export function PacientesHeader({ onExportar }: PacientesHeaderProps) {
+export function PacientesHeader({ onExportar, onNuevoPaciente }: PacientesHeaderProps) {
   return (
     <div className="pacientes-head">
       <div>
@@ -28,10 +29,10 @@ export function PacientesHeader({ onExportar }: PacientesHeaderProps) {
           <DownloadIcon />
           <span>Exportar listado (CSV/Excel)</span>
         </button>
-        <Link href="/dashboard/pacientes/nuevo" className="servicios-btn servicios-btn-primary">
+        <button type="button" className="servicios-btn servicios-btn-primary" onClick={onNuevoPaciente}>
           <PersonAddIcon />
           <span>Registrar nuevo paciente</span>
-        </Link>
+        </button>
       </div>
     </div>
   )

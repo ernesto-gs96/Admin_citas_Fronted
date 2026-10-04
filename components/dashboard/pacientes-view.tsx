@@ -4,25 +4,28 @@
 // Orquesta el estado de /dashboard/pacientes y compone el layout de 2 columnas.
 
 import { useMemo, useState } from 'react'
-import { pacientesIniciales, type Paciente } from '@/lib/mock/pacientes'
+import { calcularEdad, obtenerIniciales, pacientesIniciales, siguienteTintAvatar, type Paciente } from '@/lib/mock/pacientes'
 import { PacientesHeader } from './pacientes-header'
 import { PacientesFilterBar } from './pacientes-filter-bar'
 import { PacientesList } from './pacientes-list'
 import { PacienteFicha } from './paciente-ficha'
+import { NuevoPacienteModal, type NuevoPacienteData } from './nuevo-paciente-modal'
 
 const PAGE_SIZE = 5
 
 export function PacientesView() {
+  const [pacientes, setPacientes] = useState<Paciente[]>(pacientesIniciales)
   const [search, setSearch] = useState('')
   const [estado, setEstado] = useState('Todos los estados')
   const [etiqueta, setEtiqueta] = useState('Cualquiera')
   const [orden, setOrden] = useState('Última visita')
   const [page, setPage] = useState(1)
   const [selectedId, setSelectedId] = useState<string | null>(pacientesIniciales[0]?.id ?? null)
+  const [modalAbierto, setModalAbierto] = useState(false)
 
   const pacientesFiltrados = useMemo(() => {
     const term = search.trim().toLowerCase()
-    let lista = pacientesIniciales.filter((p) => {
+    let lista = pacientes.filter((p) => {
       const matchesSearch = term === '' || p.nombre.toLowerCase().includes(term) || p.expediente.toLowerCase().includes(term) || p.telefono.includes(term)
       const matchesEstado = estado === 'Todos los estados' || (estado === 'Activa' ? p.estado === 'activa' : p.estado === 'inactiva')
       const matchesEtiqueta = etiqueta === 'Cualquiera' || p.condicion === etiqueta
@@ -36,7 +39,7 @@ export function PacientesView() {
     }
 
     return lista
-  }, [search, estado, etiqueta, orden])
+  }, [pacientes, search, estado, etiqueta, orden])
 
   const totalPages = Math.max(Math.ceil(pacientesFiltrados.length / PAGE_SIZE), 1)
   const currentPage = Math.min(page, totalPages)
@@ -46,16 +49,38 @@ export function PacientesView() {
   const finRango = Math.min(currentPage * PAGE_SIZE, pacientesFiltrados.length)
   const rangoLabel = `${inicioRango}-${finRango}`
 
-  const pacienteSeleccionado: Paciente | null = pacientesIniciales.find((p) => p.id === selectedId) ?? null
+  const pacienteSeleccionado: Paciente | null = pacientes.find((p) => p.id === selectedId) ?? null
 
   function handleExportar() {
     // Punto de integración: generar y descargar el CSV/Excel real.
     console.info('Exportar listado de pacientes', pacientesFiltrados)
   }
 
+  function handleCrearPaciente(data: NuevoPacienteData) {
+    const nuevo: Paciente = {
+      id: `p-${Date.now()}`,
+      nombre: data.nombre,
+      expediente: `NEW-${Date.now().toString().slice(-5)}`,
+      edad: data.fechaNacimiento ? calcularEdad(data.fechaNacimiento) : 0,
+      genero: data.genero,
+      fechaNacimiento: data.fechaNacimiento || undefined,
+      iniciales: obtenerIniciales(data.nombre) || '??',
+      tintAvatar: siguienteTintAvatar(pacientes.length),
+      estado: 'activa',
+      telefono: data.telefono,
+      email: data.email,
+      condicion: 'Sin clasificar',
+      condicionTint: 'neutral',
+    }
+    setPacientes((prev) => [nuevo, ...prev])
+    setSelectedId(nuevo.id)
+    setPage(1)
+    setModalAbierto(false)
+  }
+
   return (
     <div className="pacientes-canvas">
-      <PacientesHeader onExportar={handleExportar} />
+      <PacientesHeader onExportar={handleExportar} onNuevoPaciente={() => setModalAbierto(true)} />
 
       <PacientesFilterBar
         search={search}
@@ -75,7 +100,7 @@ export function PacientesView() {
         }}
         orden={orden}
         onOrdenChange={setOrden}
-        total={pacientesIniciales.length}
+        total={pacientes.length}
       />
 
       <div className="pacientes-workspace">
@@ -94,6 +119,8 @@ export function PacientesView() {
           <PacienteFicha paciente={pacienteSeleccionado} />
         </div>
       </div>
+
+      <NuevoPacienteModal open={modalAbierto} onClose={() => setModalAbierto(false)} onSubmit={handleCrearPaciente} />
     </div>
   )
 }

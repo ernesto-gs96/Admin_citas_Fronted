@@ -31,7 +31,8 @@ export function PacienteFicha({ paciente }: PacienteFichaProps) {
           <div>
             <h3>{paciente.nombre}</h3>
             <p>
-              #{paciente.expediente} · {paciente.edad} años
+              #{paciente.expediente}
+              {paciente.edad > 0 ? ` · ${paciente.edad} años` : ''}
             </p>
           </div>
         </div>

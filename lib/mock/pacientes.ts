@@ -2,6 +2,7 @@
 // Datos de ejemplo para /dashboard/pacientes.
 
 export type EstadoPaciente = 'activa' | 'inactiva'
+export type GeneroPaciente = 'femenino' | 'masculino' | 'otro'
 export type TintBadge = 'brand' | 'amber' | 'blue' | 'purple' | 'neutral'
 export type TintAvatar = 'brand' | 'secondary' | 'tertiary' | 'neutral'
 
@@ -22,6 +23,8 @@ export interface Paciente {
   nombre: string
   expediente: string // 'MED-8942'
   edad: number
+  genero?: GeneroPaciente
+  fechaNacimiento?: string
   iniciales: string
   tintAvatar: TintAvatar
   estado: EstadoPaciente
@@ -36,6 +39,31 @@ export interface Paciente {
 export const ESTADOS_PACIENTE = ['Todos los estados', 'Activa', 'Inactiva']
 export const ETIQUETAS_PACIENTE = ['Cualquiera', 'Control rutinario', 'Hipertensión', 'Post-operatorio', 'Pediatría']
 export const ORDENES_PACIENTE = ['Última visita', 'Nombre (A-Z)', 'Próxima cita']
+
+export function calcularEdad(fechaNacimiento: string): number {
+  const nacimiento = new Date(fechaNacimiento)
+  if (Number.isNaN(nacimiento.getTime())) return 0
+  const hoy = new Date()
+  let edad = hoy.getFullYear() - nacimiento.getFullYear()
+  const aunNoCumple = hoy.getMonth() < nacimiento.getMonth() || (hoy.getMonth() === nacimiento.getMonth() && hoy.getDate() < nacimiento.getDate())
+  if (aunNoCumple) edad -= 1
+  return Math.max(edad, 0)
+}
+
+export function obtenerIniciales(nombre: string): string {
+  return nombre
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((parte) => parte[0]?.toUpperCase())
+    .join('')
+}
+
+const TINTS_AVATAR: TintAvatar[] = ['brand', 'secondary', 'tertiary', 'neutral']
+
+export function siguienteTintAvatar(indice: number): TintAvatar {
+  return TINTS_AVATAR[indice % TINTS_AVATAR.length]
+}
 
 export const pacientesIniciales: Paciente[] = [
   {
